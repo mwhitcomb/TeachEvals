@@ -35,7 +35,7 @@ QP481 QP482 QP483 QP484 QP485 QP486 QP487 QP488 QP489 QP490 QP491 QP492 QP493 QP
 QP501 QP502 QP503 QP504 QP505 QP506 QP507 QP508 QP509 QP510 QP511 QP512 QP513 QP514 QP515 QP516 QP517 QP518 QP519 QP520
 QP521 QP522 QP523 QP524 QP525 QP526 QP527 QP528 QP529 QP530 QP531 QP532 QP533 QP534 QP535 QP536 QP537 QP538 QP539 $20; 
 
-infile "G:\Temp\SampleEval.csv" dlm=',' dsd missover firstobs = 2;
+infile "C:\Temp\SampleEval.csv" dlm=',' dsd missover firstobs = 2;
 
 input SubjectID $ SecondarySubjectID $ Date $ EffortLabel $ ExpGradeLabel $ CourseLabel $ TeachingLabel $
 ExpectedofMeLabel $ AssignmentsUsefulLabel $ InstructAssessmentLabel $ EnthusiasmLabel $ KnowledgeLabel $ RespectLabel $ 
@@ -122,7 +122,7 @@ run;
 title &CourseName ;
 proc means mean median min p25 p75 max n data = recode;
 var Effort ExpGrade Course Teaching ExpectedofMe AssignmentsUseful InstructAssessment Enthusiasm 
-			Knowledge Respect Accessible SkillsGrew ;
+	Knowledge Respect Accessible SkillsGrew ;
 run;
 title;
 
