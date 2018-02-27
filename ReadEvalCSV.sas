@@ -127,24 +127,14 @@ run;
 title;
 
 
-PROC SQL;
-CREATE TABLE stacked
-                       AS SELECT a.SubjectID, a.SecondarySubjectID, a.coursename, a.strm, "Effort" as item,   a.Effort as value FROM recode A
-OUTER UNION CORRESPONDING SELECT b.SubjectID, b.SecondarySubjectID, b.coursename, b.strm, "ExpGrade" as item, b.ExpGrade  as value FROM recode B 
-OUTER UNION CORRESPONDING SELECT c.SubjectID, c.SecondarySubjectID, c.coursename, c.strm, "The Course" as item,   c.Course as value FROM recode c
-OUTER UNION CORRESPONDING SELECT d.SubjectID, d.SecondarySubjectID, d.coursename, d.strm, "The Teaching" as item, d.Teaching as value FROM recode d 
-OUTER UNION CORRESPONDING SELECT e.SubjectID, e.SecondarySubjectID, e.coursename, e.strm, "ExpectedofMe " as item,       e.ExpectedofMe  as value FROM recode e
-OUTER UNION CORRESPONDING SELECT f.SubjectID, f.SecondarySubjectID, f.coursename, f.strm, "AssignmentsUseful" as item,   f.AssignmentsUseful as value FROM recode f
-OUTER UNION CORRESPONDING SELECT g.SubjectID, g.SecondarySubjectID, g.coursename, g.strm, "InstructAssessment" as item, g.InstructAssessment as value FROM recode g 
-OUTER UNION CORRESPONDING SELECT h.SubjectID, h.SecondarySubjectID, h.coursename, h.strm, "Enthusiasm" as item, h.Enthusiasm as value FROM recode h
-OUTER UNION CORRESPONDING SELECT i.SubjectID, i.SecondarySubjectID, i.coursename, i.strm, "Knowledge" as item,  i.Knowledge as value FROM recode i
-OUTER UNION CORRESPONDING SELECT j.SubjectID, j.SecondarySubjectID, j.coursename, j.strm, "Respect" as item,    j.Respect as value FROM recode j
-OUTER UNION CORRESPONDING SELECT k.SubjectID, k.SecondarySubjectID, k.coursename, k.strm, "Accessible" as item, k.Accessible as value FROM recode k
-OUTER UNION CORRESPONDING SELECT l.SubjectID, l.SecondarySubjectID, l.coursename, l.strm, "SkillsGrew" as item, l.SkillsGrew as value FROM recode l
-;
-QUIT; 
 
 
+***************************************************************************************************************
+SECTION 2 OPTIONAL INFORMATION
+
+This section provides formats for making term values more friendly 
+and stacks the data so the grain is one row per person per question
+***************************************************************************************************************;
 
 proc format;
 
@@ -227,6 +217,23 @@ value $teachevalitems
 ;run;
 
 
+
+PROC SQL;
+CREATE TABLE stacked
+                       AS SELECT a.SubjectID, a.SecondarySubjectID, a.coursename, a.strm, "Effort" as item,   a.Effort as value FROM recode A
+OUTER UNION CORRESPONDING SELECT b.SubjectID, b.SecondarySubjectID, b.coursename, b.strm, "ExpGrade" as item, b.ExpGrade  as value FROM recode B 
+OUTER UNION CORRESPONDING SELECT c.SubjectID, c.SecondarySubjectID, c.coursename, c.strm, "The Course" as item,   c.Course as value FROM recode c
+OUTER UNION CORRESPONDING SELECT d.SubjectID, d.SecondarySubjectID, d.coursename, d.strm, "The Teaching" as item, d.Teaching as value FROM recode d 
+OUTER UNION CORRESPONDING SELECT e.SubjectID, e.SecondarySubjectID, e.coursename, e.strm, "ExpectedofMe " as item,       e.ExpectedofMe  as value FROM recode e
+OUTER UNION CORRESPONDING SELECT f.SubjectID, f.SecondarySubjectID, f.coursename, f.strm, "AssignmentsUseful" as item,   f.AssignmentsUseful as value FROM recode f
+OUTER UNION CORRESPONDING SELECT g.SubjectID, g.SecondarySubjectID, g.coursename, g.strm, "InstructAssessment" as item, g.InstructAssessment as value FROM recode g 
+OUTER UNION CORRESPONDING SELECT h.SubjectID, h.SecondarySubjectID, h.coursename, h.strm, "Enthusiasm" as item, h.Enthusiasm as value FROM recode h
+OUTER UNION CORRESPONDING SELECT i.SubjectID, i.SecondarySubjectID, i.coursename, i.strm, "Knowledge" as item,  i.Knowledge as value FROM recode i
+OUTER UNION CORRESPONDING SELECT j.SubjectID, j.SecondarySubjectID, j.coursename, j.strm, "Respect" as item,    j.Respect as value FROM recode j
+OUTER UNION CORRESPONDING SELECT k.SubjectID, k.SecondarySubjectID, k.coursename, k.strm, "Accessible" as item, k.Accessible as value FROM recode k
+OUTER UNION CORRESPONDING SELECT l.SubjectID, l.SecondarySubjectID, l.coursename, l.strm, "SkillsGrew" as item, l.SkillsGrew as value FROM recode l
+;
+QUIT; 
 
 proc tabulate missing data = stacked;
 class strm item/order = formatted;
