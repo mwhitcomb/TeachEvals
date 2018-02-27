@@ -131,8 +131,8 @@ PROC SQL;
 CREATE TABLE stacked
                        AS SELECT a.SubjectID, a.SecondarySubjectID, a.coursename, a.strm, "Effort" as item,   a.Effort as value FROM recode A
 OUTER UNION CORRESPONDING SELECT b.SubjectID, b.SecondarySubjectID, b.coursename, b.strm, "ExpGrade" as item, b.ExpGrade  as value FROM recode B 
-OUTER UNION CORRESPONDING SELECT c.SubjectID, c.SecondarySubjectID, c.coursename, c.strm, "Course" as item,   c.Course as value FROM recode c
-OUTER UNION CORRESPONDING SELECT d.SubjectID, d.SecondarySubjectID, d.coursename, d.strm, "Teaching" as item, d.Teaching as value FROM recode d 
+OUTER UNION CORRESPONDING SELECT c.SubjectID, c.SecondarySubjectID, c.coursename, c.strm, "The Course" as item,   c.Course as value FROM recode c
+OUTER UNION CORRESPONDING SELECT d.SubjectID, d.SecondarySubjectID, d.coursename, d.strm, "The Teaching" as item, d.Teaching as value FROM recode d 
 OUTER UNION CORRESPONDING SELECT e.SubjectID, e.SecondarySubjectID, e.coursename, e.strm, "ExpectedofMe " as item,       e.ExpectedofMe  as value FROM recode e
 OUTER UNION CORRESPONDING SELECT f.SubjectID, f.SecondarySubjectID, f.coursename, f.strm, "AssignmentsUseful" as item,   f.AssignmentsUseful as value FROM recode f
 OUTER UNION CORRESPONDING SELECT g.SubjectID, g.SecondarySubjectID, g.coursename, g.strm, "InstructAssessment" as item, g.InstructAssessment as value FROM recode g 
@@ -214,8 +214,8 @@ value $termyear
 value $teachevalitems
 'Effort' = '01. Effort in the courses'
 'ExpGrade' = '02. Expected grade'
-'Course' = '03. Overall quality of the course'
-'Teaching' = '04. Overall quality of the teaching'
+'The Course' = '03. Overall quality of the course'
+'The Teaching' = '04. Overall quality of the teaching'
 'ExpectedofMe' = '05. I knew what was expected of me' 
 'AssignmentsUseful' = '06. Assignments were a useful part of course' 
 'InstructAssessment' = '07. Clear connection between instruction & assessment' 
