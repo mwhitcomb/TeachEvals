@@ -5,7 +5,7 @@ data readeval;
 length SubjectID $50 SecondarySubjectID $11 Date $30 
 EffortLabel ExpGradeLabel CourseLabel TeachingLabel ExpectedofMeLabel 
 AssignmentsUsefulLabel InstructAssessmentLabel EnthusiasmLabel KnowledgeLabel RespectLabel  
-AccessibleLabel SkillsGrewLabel $20 CourseProConComment $3200 TeachingProConComment $3200 OtherComment $3200 
+AccessibleLabel SkillsGrewLabel $3 CourseProConComment $3200 TeachingProConComment $3200 OtherComment $3200 
 
 QP001 QP002 QP003 QP004 QP005 QP006 QP007 QP008 QP009 QP010 QP011 QP012 QP013 QP014 QP015 QP016 QP017 QP018 QP019 QP020
 QP021 QP022 QP023 QP024 QP025 QP026 QP027 QP028 QP029 QP030 QP031 QP032 QP033 QP034 QP035 QP036 QP037 QP038 QP039 QP040
@@ -35,7 +35,7 @@ QP481 QP482 QP483 QP484 QP485 QP486 QP487 QP488 QP489 QP490 QP491 QP492 QP493 QP
 QP501 QP502 QP503 QP504 QP505 QP506 QP507 QP508 QP509 QP510 QP511 QP512 QP513 QP514 QP515 QP516 QP517 QP518 QP519 QP520
 QP521 QP522 QP523 QP524 QP525 QP526 QP527 QP528 QP529 QP530 QP531 QP532 QP533 QP534 QP535 QP536 QP537 QP538 QP539 $20; 
 
-infile "C:\Temp\SampleEval.csv" dlm=',' dsd missover firstobs = 2;
+infile "G:\Temp\SampleEval3.csv" dlm=',' dsd missover firstobs = 2 lrecl=32767 ;
 
 input SubjectID $ SecondarySubjectID $ Date $ EffortLabel $ ExpGradeLabel $ CourseLabel $ TeachingLabel $
 ExpectedofMeLabel $ AssignmentsUsefulLabel $ InstructAssessmentLabel $ EnthusiasmLabel $ KnowledgeLabel $ RespectLabel $ 
@@ -105,7 +105,7 @@ set readeval;
 array x(*) $ EffortLabel ExpGradeLabel CourseLabel TeachingLabel ExpectedofMeLabel 	AssignmentsUsefulLabel InstructAssessmentLabel 
 			EnthusiasmLabel KnowledgeLabel RespectLabel AccessibleLabel SkillsGrewLabel;
 
-array y(*) Effort ExpGrade Course Teaching ExpectedofMe AssignmentsUseful InstructAssessment 
+array y(*) Effort ExpGrade TheCourse TheTeaching ExpectedofMe AssignmentsUseful InstructAssessment 
 			Enthusiasm Knowledge Respect Accessible SkillsGrew;
 	do i = 1 to dim(x);
 		firstchar = substr(x(i),1,1); 
@@ -121,11 +121,10 @@ run;
 
 title &CourseName ;
 proc means mean median min p25 p75 max n data = recode;
-var Effort ExpGrade Course Teaching ExpectedofMe AssignmentsUseful InstructAssessment Enthusiasm 
-	Knowledge Respect Accessible SkillsGrew ;
+var Effort ExpGrade TheCourse TheTeaching ExpectedofMe AssignmentsUseful InstructAssessment Enthusiasm 
+			Knowledge Respect Accessible SkillsGrew ;
 run;
 title;
-
 
 
 
@@ -214,16 +213,16 @@ value $teachevalitems
 'Respect' = '10. Instructor treated students with respect'
 'Accessible' = '11. Instructor was accessible outside of class'
 'SkillsGrew'  = '12. My understanding/skills grew as a result of this course'
-;run;
-
+;
+run;
 
 
 PROC SQL;
 CREATE TABLE stacked
                        AS SELECT a.SubjectID, a.SecondarySubjectID, a.coursename, a.strm, "Effort" as item,   a.Effort as value FROM recode A
 OUTER UNION CORRESPONDING SELECT b.SubjectID, b.SecondarySubjectID, b.coursename, b.strm, "ExpGrade" as item, b.ExpGrade  as value FROM recode B 
-OUTER UNION CORRESPONDING SELECT c.SubjectID, c.SecondarySubjectID, c.coursename, c.strm, "The Course" as item,   c.Course as value FROM recode c
-OUTER UNION CORRESPONDING SELECT d.SubjectID, d.SecondarySubjectID, d.coursename, d.strm, "The Teaching" as item, d.Teaching as value FROM recode d 
+OUTER UNION CORRESPONDING SELECT c.SubjectID, c.SecondarySubjectID, c.coursename, c.strm, "The Course" as item,   c.TheCourse as value FROM recode c
+OUTER UNION CORRESPONDING SELECT d.SubjectID, d.SecondarySubjectID, d.coursename, d.strm, "The Teaching" as item, d.TheTeaching as value FROM recode d 
 OUTER UNION CORRESPONDING SELECT e.SubjectID, e.SecondarySubjectID, e.coursename, e.strm, "ExpectedofMe " as item,       e.ExpectedofMe  as value FROM recode e
 OUTER UNION CORRESPONDING SELECT f.SubjectID, f.SecondarySubjectID, f.coursename, f.strm, "AssignmentsUseful" as item,   f.AssignmentsUseful as value FROM recode f
 OUTER UNION CORRESPONDING SELECT g.SubjectID, g.SecondarySubjectID, g.coursename, g.strm, "InstructAssessment" as item, g.InstructAssessment as value FROM recode g 
@@ -235,11 +234,13 @@ OUTER UNION CORRESPONDING SELECT l.SubjectID, l.SecondarySubjectID, l.coursename
 ;
 QUIT; 
 
+
 proc tabulate missing data = stacked;
 class strm item/order = formatted;
 class CourseName ;
 var value;
-table strm=''*CourseName =''*item='', value=''*mean='Avg'*f=8.1 value=''*median='Median'*f=8.1 value*n='N responses';
+table strm=''*CourseName =''*item='', value=''*mean='Avg'*f=8.1 value=''*median='Median'*f=8.1 value=''*n='N responses';
 format strm $term. item $teachevalitems.;
 run;
+
 
